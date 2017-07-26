@@ -1,6 +1,6 @@
-# INFO
-## Basic steps
+# Ideas for ramenbot3.0
 
+## Basic steps
 1. Startup
     - Load commands
     - Spawn threads for timer, communication and execution
@@ -11,6 +11,8 @@
 4. Exit
 
 ## Basic structure
+[These three will be gothreads]
+
 + Timer
     1. Calculate time elapsed
     2. Check time for time triggers
@@ -36,6 +38,21 @@
     4. Execute user command
         - Send result to communication
 
+## Bot's configuration file
+[.json file]
+
+* host - string
+* port - string
+* nick - string
+* channels - list:string
+* prefix - string
+* report_word - string
+* havepass - boolean
+* password - string
+* ssl - boolean
+* db - string
+* commands - string
+
 ## Type of triggers
 + time
 + word
@@ -47,7 +64,12 @@
 * arguments - list
 * isSystem - boolean :: users only can execute command with this flag to false ::
 * autoLoad - boolean :: execute command at start ::
-* autoLoad_args - list :: arguemnts for the autoload initialization ::
+* autoLoad_args - list :: arguments for the autoload initialization ::
 
 ## Command definition file
+[.json file]
 
+* command_path - string
+* isSystem - boolean
+* autoLoad - boolean
+* autoLoad_args - list

@@ -1,0 +1,6 @@
+{
+    "command_path" : "./test.mo",
+    "isSystem" : false,
+    "autoLoad" : false,
+    "autoLoad_args" : ""
+}

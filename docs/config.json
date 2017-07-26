@@ -1,0 +1,13 @@
+{
+    "host" : "irc.rizon.net",
+    "port" : 6697,
+    "nick" : "ramenbot",
+    "channels" : ["#fflush"],
+    "prefix" : ".",
+    "report_word" : ".report",
+    "havepass" : false,
+    "password" : "",
+    "ssl" : true,
+    "db" : "~/.ramenbot/ramen.db",
+    "commands" : "./com"
+} 
