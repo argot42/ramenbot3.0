@@ -11,7 +11,7 @@
 4. Exit
 
 ## Basic structure
-[These three will be gothreads]
+[These three will be goroutines]
 
 + Timer
     1. Calculate time elapsed
@@ -60,8 +60,10 @@
 + login, logout
 
 ## Command definition in Go
-* command - function
-* arguments - list
+function signature -> func <command_name> (util.Emisor \[emisor info\], util.Receptor \[receptor info\], []string \[arguments\]) []string \[response\]
+
+* com - function
+* arguments - list -- NO --
 * isSystem - boolean :: users only can execute command with this flag to false ::
 * autoLoad - boolean :: execute command at start ::
 * autoLoad_args - list :: arguments for the autoload initialization ::
@@ -69,7 +71,14 @@
 ## Command definition file
 [.json file]
 
+* command_name - string
 * command_path - string
 * isSystem - boolean
 * autoLoad - boolean
 * autoLoad_args - list
+
+## Init structure
+1. Load commands
+2. Try to connect to server
+    - If fail - retry a few times with incremental time
+3. Spawn all three goroutines

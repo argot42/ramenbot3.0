@@ -1,6 +1,7 @@
 {
-    "command_path" : "./test.mo",
+    "command_name" : "Test",
+    "command_path" : "com/test.so",
     "isSystem" : false,
     "autoLoad" : false,
-    "autoLoad_args" : ""
+    "autoLoad_args" : null
 }
