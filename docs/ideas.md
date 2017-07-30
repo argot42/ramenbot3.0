@@ -10,7 +10,7 @@
         - If it fails retry x times with increasing wait time
         - If it success continue with 4
     4. Spawn **Comunication**, **Execution** and **Timer**
-    5. Sleep until wake up
+    5. Block until wake up
     6. Check messages from routines
         - If restart message go to 3
         - If shutdown message end program
@@ -30,6 +30,7 @@
         - If type shutdown kill routine
         - If type restart kill routine
         - If type response send response back to server
+    5. Sleep?
 
 + Execution
     1. Check messages
