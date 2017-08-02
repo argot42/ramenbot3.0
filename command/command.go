@@ -11,6 +11,10 @@ import (
     "../util"
 )
 
+/************************/
+/****** COMMAND *********/
+/************************/
+
 // command descriptor
 type descriptor struct {
     Command_name string
@@ -20,7 +24,6 @@ type descriptor struct {
     AutoLoad_args []string
 }
 
-/****** COMMAND *********/
 // command structure
 type Command struct {
     Com plugin.Symbol
@@ -34,8 +37,29 @@ func (c Command) Execute (em util.Emisor, re util.Receptor, args []string) []str
 }
 /***********************/
 
+
+/***********************/
+/*** COMMAND MANAGER ***/
+/***********************/
+type CommMan struct {
+    Commands map[string]Command
+}
+// methods
+func (c CommMan) Lookup (name string, system bool) *Command {
+    com,ok := c.Commands[name]
+
+    // command exist
+    if (!ok) { return nil }
+    // don't allow users to execute system commands
+    if (!system && com.IsSystem) { return nil }
+
+    return &com
+}
+/***********************/
+
+
 // load commands
-func Load_commands (path string) map[string]Command {
+func Load_commands (path string) CommMan {
     // get filepaths of command descriptors
     files,err := filepath.Glob(path + "/*.json")
     if (err != nil) {
@@ -56,7 +80,8 @@ func Load_commands (path string) map[string]Command {
         Load(content, &commands)
     }
 
-    return commands
+    //return commands
+    return CommMan{commands}
 }
 
 // decode json and build command

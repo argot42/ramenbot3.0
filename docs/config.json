@@ -1,6 +1,6 @@
 {
     "host" : "irc.rizon.net",
-    "port" : 6697,
+    "port" : "6697",
     "nick" : "ramenbot",
     "channels" : ["#fflush"],
     "prefix" : ".",

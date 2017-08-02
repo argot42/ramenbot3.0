@@ -6,52 +6,52 @@
 + Main
     1. Decode configuration
     2. Load commands
-    3. Connect to server
-        - If it fails retry x times with increasing wait time
+    3. Try to connect to server
+        - If it fails retry x times with wait times
         - If it success continue with 4
-    4. Spawn **Comunication**, **Execution** and **Timer**
-    5. Block until wake up
-    6. Check messages from routines
-        - If restart message go to 3
-        - If shutdown message end program
+    4. Register to server (first ping, register name, NickServ)
+    5. Join channels
+    6. Spawn **Listener** and **Timer**
+    7. Execute **Answerer**
+    8. Check **Answerer** return value
+        - If 0 -> close program (shutdown)
+        - If 1 -> goto 3 (restart)
 
-+ Communication
-    1. Register
-    2. Join channels
-    3. Listen for messages
-        - If message
-            + If server shutdown send restart to **Execution**
-            + Send check for command to **Execution**
-            + Send check for trigger to **Execution**
-            + If IRC command answer right away
-        - If no message 
-            + Continue with 4
-    4. Check responses
-        - If type shutdown kill routine
-        - If type restart kill routine
-        - If type response send response back to server
-    5. Sleep?
++ Listener
+    1. Listen for messages
+        - If IRC command -> send response to server right away
+        - If user command -> send command to **Answerer**
+        - If EOF -> send restart to **Answerer**
+        - If no msg -> goto 2
+    2. Send check for triggers to **Answerer**
+    3. Goto 1
 
-+ Execution
-    1. Check messages
++ Answerer
+    1. Check channel
         - If no messages -> block
         - If messages
-            + If restart send restart answer to **Communication**, **Timer** and back to **Main** routine
-            + If shutdown send shutdown answer to **Communication**, **Timer** and back to **Main** routine
-            + If command send answer to **Communication**
-            + If trigger send answer to **Communication**
+            + If user command -> execute and send answer to server
+            + If trigger check -> check trigger, execute command associated to it and send answer to server
+            + If restart -> return 0
+            + If shutdown -> return 1
 
 + Timer
-    1. Calcute time elapsed
+    1. Calculate time elapsed
     2. Check time triggers
-        - If time trigger
-            + Send trigger command to **Execution**
-        - If no time trigger
-            + Continue to 3 
-    3. Check answers
-        - If type shutdown kill routine
-        - If type restart kill routine
-    4. Sleep
+        - If trigger or signal -> send trigger or signal associated response to **Answerer**
+        - If no trigger -> goto 3
+    3. Sleep 1s/.5s
+
+## Msg definition
+* type -> int
+* command -> *Command
+* body -> []string
+
+## Msg types
++ command
++ trigger
++ shutdown
++ restart
 
 ## Bot's configuration file
 [.json file]

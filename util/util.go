@@ -9,7 +9,7 @@ const Version = "3.0"
 // config structure
 type Configuration struct {
     Host string
-    Port int
+    Port string
     Nick string
     Channels []string
     Prefix string
@@ -35,3 +35,12 @@ type Emisor struct {
 type Receptor struct {
     Handle string
 }
+
+// useful configuration constants
+const (
+    Shutdown = iota
+    Restart
+)
+
+const RetryDelay = 5
+const MaxRetry = 5
