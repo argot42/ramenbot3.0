@@ -9,6 +9,8 @@ import (
     "crypto/tls"
     "../util"
     "../command"
+    "../parser"
+    "../listener"
 )
 
 func Init (config util.Configuration) {
@@ -33,21 +35,21 @@ func Init (config util.Configuration) {
 
             // register (first ping, name, NickServ)
             register(socket, config)
-            return
             // join channels
-            //join(socket, config)
+            join(socket, config)
+            time.Sleep(time.Second * 2)
 
             // start bot //
             // communication channel
-            //msg_in := make(chan util.Msg)
+            msg_in := make(chan util.Msg)
             // spawn goroutines
-            //go listener.Listener(socket, msg_in, config)
-            //go timer.Timer(socket, msg_in, config)
+            go listener.Listener(socket, msg_in, config)
+            go timer.Timer(socket, msg_in, config)
             // execute answerer
-            //response := answerer.Answerer(socket, msg_in, config)
+            response := answerer.Answerer(socket, msg_in, config)
 
             // check answerer return
-            //if (response == util.Shutdown) { break }
+            if (response == util.Shutdown) { break }
         }
 
         // try to reconnect
@@ -67,9 +69,35 @@ func connect (config util.Configuration) (net.Conn, error) {
 }
 
 func register (socket net.Conn, config util.Configuration) {
-    message,_ := bufio.NewReader(socket).ReadString('\n')
-    fmt.Printf(string(message))
+    // register nick and user
+    time.Sleep(time.Millisecond * 5)
+    fmt.Fprintf(socket, "USER %s %s %s :howdy\r\n", config.Nick, config.Nick, config.Nick)
+    time.Sleep(time.Millisecond * 5)
+    fmt.Fprintf(socket, "NICK %s\r\n", config.Nick)
+
+    reader := bufio.NewReader(socket)
+    for {
+        message,_ := reader.ReadString('\n')
+        fmt.Printf(message)
+
+        // parse msg and check if it's ping
+        parsed_msg := parser.Parse_msg(message)
+        if (parsed_msg.Ircom == "PING") {
+            // answer ping
+            listener.Pong(socket, parsed_msg.Body[0])
+            time.Sleep(time.Millisecond * 5)
+
+            // register with NickServ
+            if (config.Havepass) { fmt.Fprintf(socket, "PRIVMSG NickServ :IDENTIFY %s\r\n", config.Password) }
+
+            return
+        }
+    }
 }
 
-//func join (socket net.Conn, config util.Configuration) {
-//}
+func join (socket net.Conn, config util.Configuration) {
+    for _,channel := range config.Channels {
+        fmt.Fprintf(socket, "JOIN %s\r\n", channel)
+        time.Sleep(time.Millisecond * 5)
+    }
+}

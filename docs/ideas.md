@@ -42,16 +42,10 @@
         - If no trigger -> goto 3
     3. Sleep 1s/.5s
 
-## Msg definition
-* type -> int
-* command -> *Command
-* body -> []string
-
-## Msg types
-+ command
-+ trigger
-+ shutdown
-+ restart
+## Msg definition (parsing)
+* irc command - string
+* sender - string 
+* body - list:string
 
 ## Bot's configuration file
 [.json file]
