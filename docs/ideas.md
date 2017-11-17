@@ -47,6 +47,12 @@
 * sender - string 
 * body - list:string
 
+## Directive definition (communication between routines)
+* Comtype uint8
+* Sender string
+* Receiver string
+* Com Command
+
 ## Bot's configuration file
 [.json file]
 
@@ -67,6 +73,26 @@
 + word
 + nickname
 + login, logout
+
+## trigger definition
+* Ttype - uint8
+* Pattern - regex
+* Uses - int
+* Time - *Duration
+
+## trigger state definition
+* id - int
+* Trigger - trigger
+* Remaining_Uses - int
+* Start_time - Time
+
+## trigger manager definition
+* user_trigger - list:trigger_state
+* system_trigger - list:trigger_state
+
+#### methods
++ check_time () list:trigger_state
++ match (type int, s_to_match string) trigger_state
 
 ## Command definition in Go
 function signature -> func <command_name> (util.Emisor \[emisor info\], util.Receptor \[receptor info\], []string \[arguments\]) []string \[response\]

@@ -7,8 +7,6 @@ import (
     "io/ioutil"
     "plugin"
     "encoding/json"
-
-    "../util"
 )
 
 /************************/
@@ -32,8 +30,8 @@ type Command struct {
     AutoLoad_args []string
 }
 // methods
-func (c Command) Execute (em util.Emisor, re util.Receptor, args []string) []string {
-    return c.Com.(func(util.Emisor, util.Receptor, []string) []string) (em, re, args)
+func (c Command) Execute (em string, re string, args []string) []string {
+    return c.Com.(func(string, string, []string) []string) (em, re, args)
 }
 /***********************/
 
@@ -54,6 +52,10 @@ func (c CommMan) Lookup (name string, system bool) *Command {
     if (!system && com.IsSystem) { return nil }
 
     return &com
+}
+// get commands
+func (c CommMan) GetCommands () {
+    return c.Commands
 }
 /***********************/
 

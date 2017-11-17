@@ -1,7 +1,10 @@
 package util
 
-import "os"
-import "fmt"
+import (
+    "fmt"
+    "os"
+    "../command"
+)
 
 // version
 const Version = "3.0"
@@ -26,6 +29,15 @@ func Usage() {
     fmt.Printf("ramenbot v%s\n", Version)
     fmt.Printf("usage: %s <config.json>\n", os.Args[0])
 }
+
+// directive (communication between routines)
+type Directive struct {
+    Comtype uint8
+    Sender string
+    Receiver string
+    Com *command.Command
+}
+
 
 // emisor - receptor structs
 /*** have to change to reflect real data ***/
